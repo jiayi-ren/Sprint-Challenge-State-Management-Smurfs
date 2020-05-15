@@ -1,26 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { SmurfContext } from '../contexts/SmurfContext';
 import axios from 'axios';
 
-const initialFormValues = {
-    name: "",
-    age:0,
-    height:"",
-    id:0,
-}
+const Smurf = () =>{
 
-const Smurf = props =>{
-
-    const {update, close} = useContext(SmurfContext)
-
-    const [formValues, setFormValues] = useState(initialFormValues)
-
-    const onInputChange = event =>{
-        setFormValues({
-            ...formValues,
-            [event.target.name]: event.target.value,
-        })
-    }
+    const {formValues,onInputChange,get, close} = useContext(SmurfContext)
 
     const onSubmit = event =>{
         event.preventDefault()
@@ -33,6 +17,7 @@ const Smurf = props =>{
             })
             .then(res =>{
                 console.log(res)
+                get()
             })
             .catch(err =>{
                 console.log(err)

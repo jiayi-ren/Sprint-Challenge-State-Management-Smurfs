@@ -6,6 +6,13 @@ import Smurf from "./Smurf";
 import Item from "./Item";
 import { SmurfContext } from "../contexts/SmurfContext";
 
+const initialFormValues = {
+  name: "",
+  age:0,
+  height:"",
+  id:0,
+}
+
 class App extends Component {
 
   constructor(){
@@ -13,6 +20,7 @@ class App extends Component {
     this.state = {
       smurfs: [],
       form: false,
+      formValues: {initialFormValues}
     }
   }
 
@@ -28,7 +36,7 @@ class App extends Component {
       })
   }
 
-  componentDidUpdate() {
+  get = () =>{
     axios
       .get("http://localhost:3333/smurfs")
       .then(res =>{
@@ -62,6 +70,16 @@ class App extends Component {
     })
   }
 
+  onInputChange = event =>{
+    this.setState({
+      ...this.state,
+      formValues:{
+        ...this.state.formValues,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -69,7 +87,7 @@ class App extends Component {
         <div>Welcome to your state management version of Smurfs!</div>
         <div>Start inside of your `src/index.js` file!</div>
         <div>Have fun!</div> */}
-        <SmurfContext.Provider value={{state:this.state.smurfs, update:this.update, close:this.closeForm}}>
+        <SmurfContext.Provider value={{formValues:this.state.formValues,onInputChange:this.onInputChange, get:this.get, close:this.closeForm}}>
           
           <button onClick={this.openForm}>New Smurf</button>
           {this.state.form && <Smurf />}
